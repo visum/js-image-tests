@@ -27,7 +27,7 @@ Array.prototype.slice.call(rangeElements).forEach(function(elem) {
         var color = event.currentTarget.dataset.color;
         var value = event.currentTarget.value;
         outputs[color].value = value;
-        makeImageAdjustment(getRangeValues);
+        makeImageAdjustment(getRangeValues());
         drawFromBuffer();
     });
 });
@@ -36,7 +36,7 @@ Array.prototype.slice.call(rangeElements).forEach(function(elem) {
 sourceImage.addEventListener("load", function(e) {
     ctx.drawImage(sourceImage,0,0);
     originalImage = ctx.getImageData(0,0,400,400);
-    ctx.putImageData(imageBuffer, 0, 0);
+    imageBuffer = ctx.getImageData(0,0,400,400);
 });
 
 sourceImage.src=sourceImagePath;
@@ -44,16 +44,17 @@ sourceImage.src=sourceImagePath;
 // image manipulation
 var makeImageAdjustment = function(rgb) {
     // move through the original image, sum rgb values, put result in imageBuffer
-    for (var i = 0; i < originalImage.length; i++) {
+    for (var i = 0; i < originalImage.data.length; i++) {
         var mod = i%4;
+        var value = originalImage.data[i];
         if (mod === 3) {
-            imageBuffer[i] = originalImage[i];
+            imageBuffer.data[i] = originalImage.data[i];
         } else {
-            imageBuffer[i] = originalImage[i] + rgb[mod];
+            imageBuffer.data[i] = originalImage.data[i] + parseInt(rgb[mod],10);
         }
     }
 };
 
 var drawFromBuffer = function(){
-    ctx.setImageData(imageBuffer,0,0,400,400);
+    ctx.putImageData(imageBuffer, 0, 0);
 };
