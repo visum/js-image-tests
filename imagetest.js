@@ -8,9 +8,13 @@ var sourceImagePath = "images/cow.jpg";
 var originalImage;
 var imageBuffer;
 
+var rangeElements = Array.prototype.slice.call(document.querySelectorAll(".color-range"));
+var outputElements = Array.prototype.slice.call(document.querySelectorAll(".color-output"));
+
+var imageDim = [858,559];
+
 var outputs = {};
-var outputElements = document.querySelectorAll(".color-output");
-Array.prototype.slice.call(outputElements).forEach(function(elem){
+outputElements.forEach(function(elem){
     outputs[elem.dataset.color] = elem;
 });
 
@@ -21,8 +25,8 @@ var getRangeValues = function(){
 };
 
 // set controll event listeners
-var rangeElements = document.querySelectorAll(".color-range");
-Array.prototype.slice.call(rangeElements).forEach(function(elem) {
+
+rangeElements.forEach(function(elem) {
     elem.addEventListener("change", function(event){
         var color = event.currentTarget.dataset.color;
         var value = event.currentTarget.value;
@@ -32,11 +36,20 @@ Array.prototype.slice.call(rangeElements).forEach(function(elem) {
     });
 });
 
+document.querySelector("#reset").addEventListener("click", function(){
+    rangeElements.forEach(function(elem){
+        elem.value = 0;
+        elem.dispatchEvent(new Event("change"));
+    });
+    makeImageAdjustment(getRangeValues());
+    drawFromBuffer();
+});
+
 // load an image
 sourceImage.addEventListener("load", function(e) {
     ctx.drawImage(sourceImage,0,0);
-    originalImage = ctx.getImageData(0,0,400,400);
-    imageBuffer = ctx.getImageData(0,0,400,400);
+    originalImage = ctx.getImageData(0,0,imageDim[0],imageDim[1]);
+    imageBuffer = ctx.getImageData(0,0,imageDim[0],imageDim[1]);
 });
 
 sourceImage.src=sourceImagePath;

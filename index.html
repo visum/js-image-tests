@@ -13,12 +13,14 @@
         position: absolute;
         top: 0;
         right: 0;
+        background-color: rgba(255,255,255,0.8);
+        padding: 10px;
     }
 
     </style>
 </head>
 <body>
-<canvas id="main-canvas" width="400" height="400">
+<canvas id="main-canvas" width="838" height="559">
     Canvas support required.
 </canvas>
 <div id="controls">
@@ -28,6 +30,7 @@
     <input type="text" class="color-output" data-color="green" disabled value="0" size=4><br />
     <input type="range" class="color-range" data-color="blue" min="-255" max="255" step="1" value="0">
     <input type="text" class="color-output" data-color="blue" disabled value="0" size=4><br />
+    <button type="button" id="reset">Reset</button>
 </div>
 <script type="text/javascript" src="imagetest.js"></script>
 </body>
