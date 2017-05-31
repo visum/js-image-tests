@@ -36,7 +36,7 @@ Array.prototype.slice.call(rangeElements).forEach(function(elem) {
 sourceImage.addEventListener("load", function(e) {
     ctx.drawImage(sourceImage,0,0);
     originalImage = ctx.getImageData(0,0,400,400);
-    imageBuffer = ctx.putImageData(0,0,400,400);
+    tx.putImageData(imageBuffer, 0, 0);
 });
 
 sourceImage.src=sourceImagePath;
