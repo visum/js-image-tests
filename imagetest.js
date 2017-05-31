@@ -26,23 +26,37 @@ var getRangeValues = function(){
 
 // set controll event listeners
 
+
+
 rangeElements.forEach(function(elem) {
-    elem.addEventListener("change", function(event){
-        var color = event.currentTarget.dataset.color;
-        var value = event.currentTarget.value;
-        outputs[color].value = value;
-        makeImageAdjustment(getRangeValues());
-        drawFromBuffer();
+    elem.addEventListener("mousedown", function handler(event){
+        var color = event.target.dataset.color;
+
+        event.target.dragInterval = setInterval(function(){
+            outputs[color].value = event.target.value;
+            makeImageAdjustment(getRangeValues());
+        }, 10);
+        
     });
 });
+
+rangeElements.forEach(function(elem) {
+    elem.addEventListener("mouseup", function handler(event){
+        if (event.target.dragInterval) {
+            clearInterval(event.target.dragInterval);
+        }
+    });
+});
+
 
 document.querySelector("#reset").addEventListener("click", function(){
     rangeElements.forEach(function(elem){
         elem.value = 0;
-        elem.dispatchEvent(new Event("change"));
+    });
+    outputElements.forEach(function(elem){
+        elem.value = 0;
     });
     makeImageAdjustment(getRangeValues());
-    drawFromBuffer();
 });
 
 // load an image
@@ -50,6 +64,7 @@ sourceImage.addEventListener("load", function(e) {
     ctx.drawImage(sourceImage,0,0);
     originalImage = ctx.getImageData(0,0,imageDim[0],imageDim[1]);
     imageBuffer = ctx.getImageData(0,0,imageDim[0],imageDim[1]);
+    requestAnimationFrame(drawFromBuffer);
 });
 
 sourceImage.src=sourceImagePath;
@@ -68,6 +83,8 @@ var makeImageAdjustment = function(rgb) {
     }
 };
 
-var drawFromBuffer = function(){
+
+var drawFromBuffer = function drawFromBuffer(){
     ctx.putImageData(imageBuffer, 0, 0);
+    requestAnimationFrame(drawFromBuffer);
 };
