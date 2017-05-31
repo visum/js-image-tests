@@ -11,7 +11,7 @@ var imageBuffer;
 var rangeElements = Array.prototype.slice.call(document.querySelectorAll(".color-range"));
 var outputElements = Array.prototype.slice.call(document.querySelectorAll(".color-output"));
 
-var imageDim = [858,559];
+var imageDim = [640,426];
 
 var outputs = {};
 outputElements.forEach(function(elem){
