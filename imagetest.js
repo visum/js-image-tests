@@ -3,13 +3,14 @@
 var canvas = document.querySelector("#main-canvas");
 var ctx = canvas.getContext("2d");
 var sourceImage = new Image();
-var sourceImagePath = "images/cow.jpg";
+var sourceImagePath = "images/cow2.jpg";
 
 var originalImage;
 var imageBuffer;
 
 var rangeElements = Array.prototype.slice.call(document.querySelectorAll(".color-range"));
 var outputElements = Array.prototype.slice.call(document.querySelectorAll(".color-output"));
+var colorSwitchElements = Array.prototype.slice.call(document.querySelectorAll(".color-switch"));
 
 var imageDim = [640,426];
 
@@ -26,10 +27,8 @@ var getRangeValues = function(){
 
 // set controll event listeners
 
-
-
 rangeElements.forEach(function(elem) {
-    elem.addEventListener("mousedown", function handler(event){
+    elem.addEventListener("mousedown", function (event){
         var color = event.target.dataset.color;
 
         event.target.dragInterval = setInterval(function(){
@@ -41,10 +40,18 @@ rangeElements.forEach(function(elem) {
 });
 
 rangeElements.forEach(function(elem) {
-    elem.addEventListener("mouseup", function handler(event){
+    elem.addEventListener("mouseup", function (event){
         if (event.target.dragInterval) {
             clearInterval(event.target.dragInterval);
         }
+    });
+});
+
+colorSwitchElements.forEach(function(elem){
+    elem.addEventListener("click", function(event){
+        var c1 = event.target.dataset.c1;
+        var c2 = event.target.dataset.c2;
+        colorSwitch(c1, c2);
     });
 });
 
@@ -83,6 +90,15 @@ var makeImageAdjustment = function(rgb) {
     }
 };
 
+var colorSwitch = function(c1, c2) {
+    var colors = ["red", "green", "blue", "alpha"];
+    var c1Index = colors.indexOf(c1);
+    var c2Index = colors.indexOf(c2);
+    for (var i = 0; i < originalImage.data.length; i += 4) {
+        imageBuffer.data[i + c1Index] = originalImage.data[i + c2Index];
+        imageBuffer.data[i + c2Index] = originalImage.data[i + c1Index];
+    }
+}
 
 var drawFromBuffer = function drawFromBuffer(){
     ctx.putImageData(imageBuffer, 0, 0);
