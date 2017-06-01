@@ -94,9 +94,10 @@ var colorSwitch = function(c1, c2) {
     var colors = ["red", "green", "blue", "alpha"];
     var c1Index = colors.indexOf(c1);
     var c2Index = colors.indexOf(c2);
-    for (var i = 0; i < originalImage.data.length; i += 4) {
-        imageBuffer.data[i + c1Index] = originalImage.data[i + c2Index];
-        imageBuffer.data[i + c2Index] = originalImage.data[i + c1Index];
+    for (var i = 0; i < imageBuffer.data.length; i += 4) {
+        var temp = imageBuffer.data[i + c1Index];
+        imageBuffer.data[i + c1Index] = imageBuffer.data[i + c2Index];
+        imageBuffer.data[i + c2Index] = temp;
     }
 }
 
